@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World!</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline';"
+    />
+    <style>
+      main {
+        display: flex;
+      }
+      section {
+        width: 100%;
+      }
+      #app-grid {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <main>
+      <develop-folder></develop-folder>
+      <section>
+        <nav>NAV</nav>
+        <div id="app-grid"></div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+    <script>
+      const readDirectoryFilenames = require("./system/index")
+        .readDirectoryFilenames;
+      const buildAbsolutePath = require("./system/index").buildAbsolutePath;
+      const FolderList = require("./ui/components/FolderList");
+      const DevelopFolder = require("./ui/components/DevelopFolder");
+      const main = document.getElementsByTagName("main")[0];
+      const grid = document.getElementById("app-grid");
+
+      let currentFolderPath = "";
+      const addNewColumn = (filenames) => {
+        const column = new FolderList(filenames);
+        const appGrid = document.getElementById("app-grid");
+        appGrid.appendChild(column);
+      };
+
+      main.addEventListener("onOpenFolder", (event) => {
+        currentFolderPath = `${currentFolderPath}/${event.detail.item}`;
+        console.log(currentFolderPath);
+        const path = buildAbsolutePath(currentFolderPath);
+
+        readDirectoryFilenames(path).then((filenames) => {
+          addNewColumn(filenames);
+        });
+      });
+    </script>
+  </body>
+</html>
