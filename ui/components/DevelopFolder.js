@@ -34,17 +34,26 @@ class DevelopFolder extends HTMLElement {
 
   buildHTMLList(filenames) {
     const list = new FolderList(filenames);
-    this.addEventListener("onOpenFolder", () => console.log("open bubble"));
+    this.addEventListener("onOpenFolder", (event) => {
+      // modify open folder if it comes from develop-folder to pass infos in the nav
+      const nav = document.querySelector("nav");
+      nav.textContent = event.detail.item;
+    });
+
     list.setAttribute("slot", "list");
-    console.log(list, filenames);
     this.appendChild(list);
   }
 
   connectedCallback() {
-    readDirectoryFilenames().then((filenames) => {
-      console.log(filenames);
-      this.buildHTMLList(filenames);
-    });
+    readDirectoryFilenames()
+      .then((filenames) => {
+        console.log(filenames);
+        this.buildHTMLList(filenames);
+      })
+      .catch((err) => {
+        console.log("here");
+        // removeColumn();
+      });
   }
 }
 

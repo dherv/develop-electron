@@ -14,15 +14,16 @@ template.innerHTML = `
 `;
 
 class FolderList extends HTMLElement {
-  constructor(filenames) {
+  constructor(filenames, level) {
     super();
     let shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(template.content.cloneNode(true));
     this.filenames = filenames;
+    this.level = level;
   }
   connectedCallback() {
     this.filenames.forEach((filename) => {
-      const listItem = new FolderListItem(filename);
+      const listItem = new FolderListItem(filename, this.level);
       this.appendChild(listItem);
     });
   }

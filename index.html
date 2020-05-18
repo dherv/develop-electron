@@ -26,35 +26,77 @@
       <develop-folder></develop-folder>
       <section>
         <nav>NAV</nav>
-        <div id="app-grid"></div>
+        <div id="app-grid">
+          <button onclick="back()">back</button>
+        </div>
       </section>
     </main>
     <script src="app.js"></script>
     <script>
-      const readDirectoryFilenames = require("./system/index")
-        .readDirectoryFilenames;
-      const buildAbsolutePath = require("./system/index").buildAbsolutePath;
-      const FolderList = require("./ui/components/FolderList");
-      const DevelopFolder = require("./ui/components/DevelopFolder");
-      const main = document.getElementsByTagName("main")[0];
-      const grid = document.getElementById("app-grid");
+      document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+          const readDirectoryFilenames = require("./system/index")
+            .readDirectoryFilenames;
+          const buildAbsolutePath = require("./system/index").buildAbsolutePath;
+          const FolderList = require("./ui/components/FolderList");
+          const DevelopFolder = require("./ui/components/DevelopFolder");
+          const main = document.getElementsByTagName("main")[0];
+          const grid = document.getElementById("app-grid");
 
-      let currentFolderPath = "";
-      const addNewColumn = (filenames) => {
-        const column = new FolderList(filenames);
-        const appGrid = document.getElementById("app-grid");
-        appGrid.appendChild(column);
-      };
+          let currentFolderPath = [];
+          let currentLevel = 0;
 
-      main.addEventListener("onOpenFolder", (event) => {
-        currentFolderPath = `${currentFolderPath}/${event.detail.item}`;
-        console.log(currentFolderPath);
-        const path = buildAbsolutePath(currentFolderPath);
+          const addNewColumn = (filenames) => {
+            console.log("add");
+            const column = new FolderList(filenames, currentFolderPath.length);
+            const appGrid = document.getElementById("app-grid");
+            appGrid.appendChild(column);
+          };
 
-        readDirectoryFilenames(path).then((filenames) => {
-          addNewColumn(filenames);
-        });
-      });
+          const removeColumns = (count = 0) => {
+            console.log("remove", count);
+            currentFolderPath.slice(0, currentFolderPath.length - count);
+            const appGrid = document.getElementById("app-grid");
+          };
+
+          const replaceColumn = (item) => {
+            console.log("replace", item, currentFolderPath);
+            currentFolderPath.splice(-1, 1, item);
+            console.log("replace", item, currentFolderPath);
+          };
+
+          const back = () => {
+            let newPath = currentFolderPath.slice(
+              0,
+              currentFolderPath.length - 1
+            );
+            removeColumns();
+          };
+          main.addEventListener("onOpenFolder", (event) => {
+            console.log("CATCH", document.querySelector("#app-grid"));
+            const clickedColumn = event.detail.level;
+            console.log(event.detail.level, currentFolderPath.length);
+
+            if (event.detail.level < currentFolderPath.length) {
+              removeColumns(-1);
+              replaceColumn(event.detail.item);
+              const path = buildAbsolutePath(`${currentFolderPath.join("/")}`);
+              readDirectoryFilenames(path).then((filenames) => {
+                addNewColumn(filenames);
+              });
+            } else {
+              currentFolderPath.push(event.detail.item);
+              const path = buildAbsolutePath(`${currentFolderPath.join("/")}`);
+              readDirectoryFilenames(path).then((filenames) => {
+                addNewColumn(filenames);
+              });
+            }
+          });
+          // your code goes here
+        },
+        false
+      );
     </script>
   </body>
 </html>
