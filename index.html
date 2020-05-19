@@ -34,6 +34,26 @@
     </main>
     <script src="app.js"></script>
     <script>
+      let currentFolderPath = [];
+
+      const removeColumns = () => {
+        let columns = Array.from(document.querySelectorAll("folder-list"));
+        let columsSlice = columns.slice(columns.length - 1);
+        columsSlice.forEach((c) => {
+          const parent = c.parentNode;
+          parent.removeChild(c);
+        });
+      };
+      const back = () => {
+        console.log(currentFolderPath.length);
+        if (currentFolderPath.length > 1) {
+          currentFolderPath = currentFolderPath.slice(
+            0,
+            currentFolderPath.length - 1
+          );
+          removeColumns();
+        }
+      };
       document.addEventListener(
         "DOMContentLoaded",
         function () {
@@ -41,22 +61,20 @@
             .readDirectoryFilenames;
           const buildAbsolutePath = require("./system/index").buildAbsolutePath;
           const FolderList = require("./ui/components/FolderList");
-          const DevelopFolder = require("./ui/components/DevelopFolder");
+          // const DevelopFolder = require("./ui/components/DevelopFolder");
           const main = document.getElementsByTagName("main")[0];
           const grid = document.getElementById("app-grid");
 
-          let currentFolderPath = [];
           let currentLevel = 0;
 
-          const addNewColumn = (filenames) => {
-            console.log("ADD", currentFolderPath);
-            const column = new FolderList(
-              filenames,
-              currentFolderPath.length - 1
-            );
-            const appGrid = document.getElementById("app-grid");
-            appGrid.appendChild(column);
-          };
+          // const addNewColumn = (filenames) => {
+          //   const column = new FolderList(
+          //     filenames,
+          //     currentFolderPath.length - 1
+          //   );
+          //   const appGrid = document.getElementById("app-grid");
+          //   appGrid.appendChild(column);
+          // };
 
           const addDevelopColumn = (filenames) => {
             const column = new FolderList(
@@ -77,27 +95,19 @@
 
           developFolder();
 
-          const removeColumns = (count = 0) => {
-            console.log("remove", count);
-            currentFolderPath.slice(0, currentFolderPath.length - count);
-            const appGrid = document.getElementById("app-grid");
-          };
+          // const removeColumns = (count = 0) => {
+          //   console.log("remove", count);
+          //   currentFolderPath.slice(0, currentFolderPath.length - count);
+          //   const appGrid = document.getElementById("app-grid");
+          // };
 
-          const replaceColumn = (item) => {
-            console.log("replace", item, currentFolderPath);
-            currentFolderPath.splice(-1, 1, item);
-            console.log("replace", item, currentFolderPath);
-          };
+          // const replaceColumn = (item) => {
+          //   console.log("replace", item, currentFolderPath);
+          //   currentFolderPath.splice(-1, 1, item);
+          //   console.log("replace", item, currentFolderPath);
+          // };
 
-          const back = () => {
-            let newPath = currentFolderPath.slice(
-              0,
-              currentFolderPath.length - 1
-            );
-            removeColumns();
-          };
           main.addEventListener("onOpenFolder", (event) => {
-            console.log("CATCH", event.detail.level);
             const clickedColumn = event.detail.level;
 
             // update path
@@ -116,7 +126,6 @@
 
             folderPath = [...folderPath, event.detail.item];
             currentFolderPath = folderPath;
-            console.log(currentFolderPath);
 
             // get the filenames
             const path = buildAbsolutePath(`${currentFolderPath.join("/")}`);
