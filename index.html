@@ -120,15 +120,17 @@
 
             // get the filenames
             const path = buildAbsolutePath(`${currentFolderPath.join("/")}`);
-            readDirectoryFilenames(path).then((filenames) => {
-              // add new item
-              const column = new FolderList(
-                filenames,
-                currentFolderPath.length - 1
-              );
-              const appGrid = document.getElementById("app-grid");
-              appGrid.appendChild(column);
-            });
+            readDirectoryFilenames(path)
+              .then((filenames) => {
+                // add new item
+                const column = new FolderList(
+                  filenames,
+                  currentFolderPath.length - 1
+                );
+                const appGrid = document.getElementById("app-grid");
+                appGrid.appendChild(column);
+              })
+              .catch((err) => console.error(err));
 
             // if (event.detail.level < currentFolderPath.length) {
             //   removeColumns(-1);

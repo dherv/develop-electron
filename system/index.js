@@ -6,15 +6,33 @@ const homeDir = os.homedir();
 const defaultFolderPath = path.join("Documents", "develop");
 const defaultAbsolutePath = path.resolve(homeDir, defaultFolderPath);
 
-const readDirectoryFilenames = (path = defaultAbsolutePath) => {
+// TODO: refactor promises with require('fs').promises
+// const fs = require('fs').promises;
+
+const checkDirectoryOrFile = async (path = defaultAbsolutePath) => {
   return new Promise((resolve, reject) => {
-    return fs.readdir(path, (err, files) => {
+    fs.lstat(path, (err, stats) => {
       if (err) {
-        console.error(err);
         reject(err);
       }
-      return resolve(files);
+      const check = stats.isDirectory();
+      resolve(check);
     });
+  });
+};
+const readDirectoryFilenames = (path = defaultAbsolutePath) => {
+  return new Promise(async (resolve, reject) => {
+    const check = await checkDirectoryOrFile(path);
+    if (check) {
+      return fs.readdir(path, (err, files) => {
+        if (err) {
+          reject(err);
+        }
+        return resolve(files);
+      });
+    } else {
+      reject(new Error("This is not a directory"));
+    }
   });
 };
 
