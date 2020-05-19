@@ -19,7 +19,7 @@ const readDirectoryFilenames = (path = defaultAbsolutePath) => {
 };
 
 const buildAbsolutePath = (filename) =>
-  path.resolve(homeDir, path.join("Documents", "develop", filename));
+  path.resolve(homeDir, path.join("Documents", filename));
 
 module.exports = {
   readDirectoryFilenames: readDirectoryFilenames,
