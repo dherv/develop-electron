@@ -14,11 +14,12 @@ template.innerHTML = `
 `;
 
 class FolderListItem extends HTMLElement {
-  constructor(filename) {
+  constructor(filename, level) {
     super();
     let shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(template.content.cloneNode(true));
     this.filename = filename;
+    this.level = level;
   }
   connectedCallback() {
     const listItemText = document.createTextNode(this.filename);
@@ -30,9 +31,9 @@ class FolderListItem extends HTMLElement {
   }
 
   _onClick() {
-    console.log(this.textContent);
     const onOpenFolder = new CustomEvent("onOpenFolder", {
       detail: {
+        level: this.level,
         item: this.textContent,
         s: "color: red",
       },

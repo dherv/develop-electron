@@ -23,38 +23,20 @@
   <body>
     <div id="root"></div>
     <main>
-      <develop-folder></develop-folder>
+      <!-- <develop-folder></develop-folder> -->
+      <aside id="develop-folder"></aside>
       <section>
         <nav>NAV</nav>
-        <div id="app-grid"></div>
+        <div id="app-grid">
+          <button id="backButton">back</button>
+        </div>
       </section>
     </main>
     <script src="app.js"></script>
     <script>
-      const readDirectoryFilenames = require("./system/index")
-        .readDirectoryFilenames;
-      const buildAbsolutePath = require("./system/index").buildAbsolutePath;
-      const FolderList = require("./ui/components/FolderList");
-      const DevelopFolder = require("./ui/components/DevelopFolder");
-      const main = document.getElementsByTagName("main")[0];
-      const grid = document.getElementById("app-grid");
-
-      let currentFolderPath = "";
-      const addNewColumn = (filenames) => {
-        const column = new FolderList(filenames);
-        const appGrid = document.getElementById("app-grid");
-        appGrid.appendChild(column);
-      };
-
-      main.addEventListener("onOpenFolder", (event) => {
-        currentFolderPath = `${currentFolderPath}/${event.detail.item}`;
-        console.log(currentFolderPath);
-        const path = buildAbsolutePath(currentFolderPath);
-
-        readDirectoryFilenames(path).then((filenames) => {
-          addNewColumn(filenames);
-        });
-      });
+      const app = new App();
+      app.init();
+      app.initEvents();
     </script>
   </body>
 </html>
