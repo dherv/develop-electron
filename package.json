@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": " jest --watch --no-warnings --coverage"
+    "test": "jest --watch --no-warnings --coverage",
+    "test:ci": "jest"
   },
   "keywords": [],
   "author": "",
