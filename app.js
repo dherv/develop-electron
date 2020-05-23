@@ -41,11 +41,18 @@ App.prototype.init = function () {
         0,
         currentFolderPath.length - 1
       );
+      if (currentFolderPath.length === 1) {
+        this.navUpdate("NAV");
+      }
       this.removeColumns(-1);
     }
   };
   const backButton = document.getElementById("backButton");
   backButton.addEventListener("click", back);
+};
+App.prototype.navUpdate = function (text) {
+  const nav = document.querySelector("nav");
+  nav.textContent = text;
 };
 
 App.prototype.initEvents = function () {
@@ -59,6 +66,11 @@ App.prototype.initEvents = function () {
 
     // update UI
     this.removeColumns(maxIndex);
+
+    // replace title
+    if (currentFolderPath.length === 1) {
+      this.navUpdate(event.detail.item);
+    }
 
     folderPath = [...folderPath, event.detail.item];
     currentFolderPath = folderPath;
