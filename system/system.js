@@ -28,6 +28,7 @@ const readDirectoryFilenames = (path = defaultAbsolutePath) => {
         if (err) {
           reject(err);
         }
+        console.log(files);
         return resolve(files);
       });
     } else {
