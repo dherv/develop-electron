@@ -20,6 +20,7 @@ const checkDirectoryOrFile = async (path = defaultAbsolutePath) => {
     });
   });
 };
+
 const readDirectoryFilenames = (path = defaultAbsolutePath) => {
   return new Promise(async (resolve, reject) => {
     const check = await checkDirectoryOrFile(path);

@@ -22,7 +22,8 @@ describe("application user interface", () => {
       <!-- <develop-folder></develop-folder> -->
       <aside id="develop-folder"></aside>
       <section>
-        <nav>NAV</nav>
+        <nav>
+        </nav>
         <div id="app-grid" data-testid="app-grid">
           <button id="backButton">back</button>
         </div>
@@ -65,6 +66,7 @@ describe("application user interface", () => {
       expect(getByText("p2")).toBeDefined();
       // d1 is present also in the nav
       expect(getAllByText("d1")).toHaveLength(2);
+      expect(document.querySelector("visual-studio-icon")).toBeDefined();
     });
 
     test("3. click an item on same column should replace the next folder list", async () => {
@@ -82,6 +84,7 @@ describe("application user interface", () => {
       expect(queryByText("p2")).toBeNull();
       // d1 is present also in the nav
       expect(getAllByText("d1")).toHaveLength(2);
+      expect(document.querySelector("visual-studio-icon")).toBeDefined();
     });
 
     test("4. click back button should remove the last column", async () => {
@@ -116,8 +119,12 @@ describe("application user interface", () => {
       fireEvent.click(backButton, { bubbles: true });
       await waitFor(() => {});
       expect(grid.children).toHaveLength(1);
-      // d1 should always be defined
-      expect(getByText("d1")).toBeDefined();
+    });
+
+    test("7. nav - title and icon should have been removed", () => {
+      const { queryByText } = within(document.querySelector("nav"));
+      expect(queryByText("d1")).toBeNull();
+      expect(document.querySelector("visual-studio-icon")).toBeNull();
     });
   });
 });
