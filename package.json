@@ -13,7 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@testing-library/dom": "^7.5.7",
-    "electron": "^8.3.0",
+    "electron": "^9.4.0",
     "electron-reload": "^1.5.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
